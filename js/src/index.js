@@ -7,6 +7,12 @@
 // dynamically.
 __webpack_public_path__ = document.querySelector('body').getAttribute('data-base-url') + 'nbextensions/dfedit/';
 
+require('./vendor/slickgrid-2.3.6/slick.grid.css');
+require('./vendor/slickgrid-2.3.6/slick-default-theme.css');
+require('./vendor/slickgrid-2.3.6/css/smoothness/jquery-ui-1.11.3.custom.css');
+
+require('./dfedit.css');
+
 // Export widget models and views, and the npm package version number.
 module.exports = require('./example.js');
 module.exports['version'] = require('../package.json').version;
