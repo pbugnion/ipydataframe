@@ -1,5 +1,7 @@
 import widgets from 'jupyter-js-widgets';
 import _ from 'underscore';
+import $ from 'jquery';
+import 'select2';
 
 import Slick from './vendor/slickgrid-2.3.6';
 
@@ -19,6 +21,17 @@ export class HelloModel extends widgets.DOMWidgetModel {
     }
 };
 
+export class StringsFilterModel extends widgets.DOMWidgetModel {
+    defaults() {
+        return {
+            ...super.defaults(),
+            _model_name: 'StringFilter',
+            _view_name: 'StringFilterView',
+            _column: null,
+            filterValue: []
+        }
+    }
+};
 
 export class HelloView extends widgets.DOMWidgetView {
     render() {
@@ -44,3 +57,25 @@ export class HelloView extends widgets.DOMWidgetView {
     }
 
 };
+
+export class StringsFilterView extends widgets.DOMWidgetView {
+    render() {
+        const options = ['hello', 'world', 'lapha', 'beta'];
+        const select = document.createElement('select');
+        select.setAttribute('multiple', 'multiple');
+
+        const optionElements = options.forEach(optionValue => {
+            const elem = document.createElement('option');
+            elem.text = optionValue;
+            elem.setAttribute('value', optionValue);
+            select.appendChild(elem);
+        });
+
+
+        this.el.style.width = '600px';
+        this.el.style.height = '400px';
+
+        this.el.appendChild(select);
+        $(select).select2({tags: true});
+    }
+}

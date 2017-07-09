@@ -11,6 +11,8 @@ require('./vendor/slickgrid-2.3.6/slick.grid.css');
 require('./vendor/slickgrid-2.3.6/slick-default-theme.css');
 require('./vendor/slickgrid-2.3.6/css/smoothness/jquery-ui-1.11.3.custom.css');
 
+require('select2/dist/css/select2.min.css');
+
 require('./dfedit.css');
 
 // Export widget models and views, and the npm package version number.

@@ -36,6 +36,7 @@
   },
   "dependencies": {
     "jupyter-js-widgets": "3.0.0-alpha.2",
+    "select2": "^4.0.3",
     "underscore": "^1.8.3"
   }
 }

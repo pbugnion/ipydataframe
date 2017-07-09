@@ -22,3 +22,10 @@ class HelloWorld(widgets.DOMWidget):
         new_df = change['new']
         self._columns = new_df.columns.tolist()
         self._data = new_df.values.tolist()
+
+
+class StringsFilter(widgets.DOMWidget):
+    _view_name = Unicode('StringsFilterView').tag(sync=True)
+    _model_name = Unicode('StringsFilterModel').tag(sync=True)
+    _view_module = Unicode('dfedit').tag(sync=True)
+    _model_module = Unicode('dfedit').tag(sync=True)
