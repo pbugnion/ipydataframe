@@ -13,7 +13,8 @@ export class HelloModel extends widgets.DOMWidgetModel {
             _view_module : 'dfedit',
             _model_module_version : '0.1.0',
             _view_module_version : '0.1.0',
-            value : 'Hello World'
+            _columns: [],
+            _data: []
         }
     }
 };
@@ -21,14 +22,13 @@ export class HelloModel extends widgets.DOMWidgetModel {
 
 export class HelloView extends widgets.DOMWidgetView {
     render() {
-        const columns = [
-            {id: "title", name: "Title", field: "title"},
-            {id: "duration", name: "Duration", field: "duration"},
-        ];
-        const data = [
-            {title: "d1", duration: "5 days"},
-            {title: "d2", duration: "6 days"}
-        ]
+        const columns = this.model.get('_columns');
+        const slickColumns = columns.map(name => {
+            return {id: name, name: name, field: name};
+        });
+        const slickData = this.model.get('_data').map(row => {
+            return _.object(columns, row);
+        });
 
         const options = {
             enableCellNavigation: true,
@@ -36,11 +36,11 @@ export class HelloView extends widgets.DOMWidgetView {
         };
 
         this.el.style.width = '600px';
-        this.el.style.height = '100%';
+        this.el.style.height = '400px';
 
         this.el.className += ' dfedit-table';
 
-        const grid = new Slick.Grid(this.el, data, columns, options);
+        const grid = new Slick.Grid(this.el, slickData, slickColumns, options);
     }
 
 };
