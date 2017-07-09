@@ -35,6 +35,21 @@ export class StringsFilterModel extends widgets.DOMWidgetModel {
     }
 };
 
+
+export class FiltersBoxModel extends widgets.VBoxModel {
+    defaults() {
+        return {
+            ...super.defaults(),
+            _model_name: 'StringFilter',
+            _view_name: 'StringFilterView',
+            _model_module: 'dfedit',
+            _view_module: 'dfedit',
+            children: [],
+            box_style: ''
+        }
+    }
+}
+
 export class HelloView extends widgets.DOMWidgetView {
     render() {
         const columns = this.model.get('_columns');
@@ -80,3 +95,5 @@ export class StringsFilterView extends widgets.DOMWidgetView {
         $(select).select2({tags: true});
     }
 }
+
+export class FiltersBoxView extends widgets.VBoxView {};

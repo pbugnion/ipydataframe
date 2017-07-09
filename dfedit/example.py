@@ -1,5 +1,5 @@
 import ipywidgets as widgets
-from traitlets import Instance, List, Dict, Unicode, observe
+from traitlets import Instance, List, Dict, Unicode, observe, Tuple
 
 import pandas as pd
 
@@ -29,3 +29,13 @@ class StringsFilter(widgets.DOMWidget):
     _model_name = Unicode('StringsFilterModel').tag(sync=True)
     _view_module = Unicode('dfedit').tag(sync=True)
     _model_module = Unicode('dfedit').tag(sync=True)
+
+
+class FiltersBox(widgets.DOMWidget):
+    _view_name = Unicode('FiltersBoxView').tag(sync=True)
+    _model_name = Unicode('FiltersBoxModel').tag(sync=True)
+    _view_module = Unicode('dfedit').tag(sync=True)
+    _model_module = Unicode('dfedit').tag(sync=True)
+    children = Tuple(help="List of widget children").tag(
+            sync=True, **widgets.widget_serialization)
+
