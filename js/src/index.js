@@ -15,6 +15,7 @@ require('select2/dist/css/select2.min.css');
 
 require('./dfedit.css');
 
+
 // Export widget models and views, and the npm package version number.
 module.exports = require('./example.js');
 module.exports['version'] = require('../package.json').version;

@@ -9,12 +9,12 @@ export class HelloModel extends widgets.DOMWidgetModel {
     defaults() {
         return {
             ...super.defaults(),
-            _model_name : 'HelloModel',
-            _view_name : 'HelloView',
-            _model_module : 'dfedit',
-            _view_module : 'dfedit',
-            _model_module_version : '0.1.0',
-            _view_module_version : '0.1.0',
+            _model_name: 'HelloModel',
+            _view_name: 'HelloView',
+            _model_module: 'dfedit',
+            _view_module: 'dfedit',
+            _model_module_version: '0.1.0',
+            _view_module_version: '0.1.0',
             _columns: [],
             _data: []
         }
@@ -55,7 +55,6 @@ export class HelloView extends widgets.DOMWidgetView {
 
         const grid = new Slick.Grid(this.el, slickData, slickColumns, options);
     }
-
 };
 
 export class StringsFilterView extends widgets.DOMWidgetView {
