@@ -27,6 +27,8 @@ export class StringsFilterModel extends widgets.DOMWidgetModel {
             ...super.defaults(),
             _model_name: 'StringFilter',
             _view_name: 'StringFilterView',
+            _model_module: 'dfedit',
+            _view_module: 'dfedit',
             _column: null,
             filterValue: []
         }
