@@ -76,7 +76,29 @@ export class HelloView extends widgets.DOMWidgetView {
 
 export class StringsFilterView extends widgets.DOMWidgetView {
     render() {
-        const options = ['hello', 'world', 'lapha', 'beta'];
+        this.el.style.width = '600px';
+        this.el.style.height = '400px';
+
+        this._renderColumnsSelect()
+        this._renderOptionsSelect()
+    }
+
+    _renderColumnsSelect() {
+        const options = ['c1', 'c2', 'c3', 'c4'];
+        const select = document.createElement('select');
+
+        const optionElements = options.forEach(optionValue => {
+            const elem = document.createElement('option');
+            elem.text = optionValue;
+            elem.setAttribute('value', optionValue);
+            select.appendChild(elem);
+        });
+        this.el.appendChild(select);
+        $(select).select2();
+    }
+
+    _renderOptionsSelect() {
+        const options = ['hello', 'world', 'alpha', 'beta'];
         const select = document.createElement('select');
         select.setAttribute('multiple', 'multiple');
 
@@ -86,11 +108,6 @@ export class StringsFilterView extends widgets.DOMWidgetView {
             elem.setAttribute('value', optionValue);
             select.appendChild(elem);
         });
-
-
-        this.el.style.width = '600px';
-        this.el.style.height = '400px';
-
         this.el.appendChild(select);
         $(select).select2({tags: true});
     }
