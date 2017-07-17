@@ -31,11 +31,45 @@ class StringsFilter(widgets.DOMWidget):
     _model_module = Unicode('dfedit').tag(sync=True)
 
 
-class FiltersBox(widgets.DOMWidget):
-    _view_name = Unicode('FiltersBoxView').tag(sync=True)
-    _model_name = Unicode('FiltersBoxModel').tag(sync=True)
+class FiltersList(widgets.DOMWidget):
+    _view_name = Unicode('FiltersListView').tag(sync=True)
+    _model_name = Unicode('FiltersListModel').tag(sync=True)
     _view_module = Unicode('dfedit').tag(sync=True)
     _model_module = Unicode('dfedit').tag(sync=True)
     children = Tuple(help="List of widget children").tag(
             sync=True, **widgets.widget_serialization)
+
+
+class Transformation(object):
+
+    def __init__(self, transformation_id, name, description):
+        self.transformation_id = transformation_id
+        self.name = name
+        self.description = description
+
+    def to_json(self):
+        body = {
+                'transformationId': self.transformation_id,
+                'name': self.name,
+                'description': self.description
+        }
+        return body
+
+transformation_serializers = {
+        'from_json': None,
+        'to_json': lambda transformations, _: [t.to_json() for t in transformations]
+}
+
+TRANSFORMATIONS = [
+        Transformation('keywords-filter', 'Keywords filter', 'bla bla bla')
+]
+
+class NewFilter(widgets.DOMWidget):
+    _view_name = Unicode('NewFilterView').tag(sync=True)
+    _model_name = Unicode('NewFilterModel').tag(sync=True)
+    _view_module = Unicode('dfedit').tag(sync=True)
+    _model_module = Unicode('dfedit').tag(sync=True)
+    transformations = List(Instance(Transformation),
+            default_value=TRANSFORMATIONS).tag(
+                    sync=True, **transformation_serializers)
 

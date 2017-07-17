@@ -36,7 +36,7 @@ export class StringsFilterModel extends widgets.DOMWidgetModel {
 };
 
 
-export class FiltersBoxModel extends widgets.VBoxModel {
+export class FiltersListModel extends widgets.VBoxModel {
     defaults() {
         return {
             ...super.defaults(),
@@ -46,6 +46,18 @@ export class FiltersBoxModel extends widgets.VBoxModel {
             _view_module: 'dfedit',
             children: [],
             box_style: ''
+        }
+    }
+}
+
+export class NewFilterModel extends widgets.DOMWidgetModel {
+    defaults() {
+        return {
+            ...super.defaults(),
+            _model_name: 'NewFiltersModel',
+            _model_module: 'NewFiltersView',
+            _model_module: 'dfedit',
+            _view_module: 'dfedit',
         }
     }
 }
@@ -113,4 +125,21 @@ export class StringsFilterView extends widgets.DOMWidgetView {
     }
 }
 
-export class FiltersBoxView extends widgets.VBoxView {};
+export class FiltersListView extends widgets.VBoxView {};
+
+export class NewFilterView extends widgets.DOMWidgetView {
+    render() {
+        const transformations = this.model.get('transformations')
+        const selectOptions = transformations.map(t => {
+            return {
+                id: t.transformationId,
+                text: t.name
+            };
+        })
+        console.log(selectOptions);
+
+        const select = document.createElement('select');
+        this.el.appendChild(select);
+        $(select).select2({data: selectOptions});
+    }
+}
