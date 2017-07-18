@@ -4,12 +4,11 @@ from traitlets import Instance, List, Dict, Unicode, observe, Tuple, default
 import pandas as pd
 
 
-@widgets.register('hello.Hello')
-class HelloWorld(widgets.DOMWidget):
+class DFWidget(widgets.DOMWidget):
     """"""
     df = Instance(pd.DataFrame)
-    _view_name = Unicode('HelloView').tag(sync=True)
-    _model_name = Unicode('HelloModel').tag(sync=True)
+    _view_name = Unicode('DFWidgetView').tag(sync=True)
+    _model_name = Unicode('DFWidgetModel').tag(sync=True)
     _view_module = Unicode('dfedit').tag(sync=True)
     _model_module = Unicode('dfedit').tag(sync=True)
     _view_module_version = Unicode('^0.1.0').tag(sync=True)

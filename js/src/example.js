@@ -5,12 +5,12 @@ import 'select2';
 
 import Slick from './vendor/slickgrid-2.3.6';
 
-export class HelloModel extends widgets.DOMWidgetModel {
+export class DFWidgetModel extends widgets.DOMWidgetModel {
     defaults() {
         return {
             ...super.defaults(),
-            _model_name: 'HelloModel',
-            _view_name: 'HelloView',
+            _model_name: 'DFWidgetModel',
+            _view_name: 'DFWidgetView',
             _model_module: 'dfedit',
             _view_module: 'dfedit',
             _model_module_version: '0.1.0',
@@ -80,7 +80,7 @@ export class TransformationsBoxModel extends widgets.DOMWidgetModel {
     }
 }
 
-export class HelloView extends widgets.DOMWidgetView {
+export class DFWidgetView extends widgets.DOMWidgetView {
     render() {
         const columns = this.model.get('_columns');
         const slickColumns = columns.map(name => {
