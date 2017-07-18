@@ -32,7 +32,7 @@ module.exports = [
      // custom widget.
      // It must be an amd module
      //
-        entry: './src/index.js',
+        entry: ['babel-polyfill', './src/index.js'],
         output: {
             filename: 'index.js',
             path: __dirname + '/../dfedit/static',
