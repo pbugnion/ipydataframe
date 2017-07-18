@@ -55,7 +55,7 @@ export class NewFilterModel extends widgets.DOMWidgetModel {
         return {
             ...super.defaults(),
             _model_name: 'NewFiltersModel',
-            _model_module: 'NewFiltersView',
+            _view_name: 'NewFiltersView',
             _model_module: 'dfedit',
             _view_module: 'dfedit',
         }
