@@ -62,6 +62,24 @@ export class NewFilterModel extends widgets.DOMWidgetModel {
     }
 }
 
+export class TransformationsBoxModel extends widgets.DOMWidgetModel {
+    defauts() {
+        return {
+            ...super.defaults(),
+            _model_name: 'TransformationsBoxModel',
+            _view_name: 'TransformationsBoxView',
+            _model_module: 'dfedit',
+            _view_module: 'dfedit'
+        }
+    }
+
+    static serializers = {
+        ...widgets.DOMWidgetModel.serializers,
+        filters_list: {deserialize: widgets.unpack_models},
+        new_filter: {deserialize: widgets.unpack_models}
+    }
+}
+
 export class HelloView extends widgets.DOMWidgetView {
     render() {
         const columns = this.model.get('_columns');
@@ -150,5 +168,14 @@ export class NewFilterView extends widgets.DOMWidgetView {
                 }
             )
         });
+    }
+}
+
+export class TransformationsBoxView extends widgets.DOMWidgetView {
+    async render() {
+        const filtersList = await this.create_child_view(this.model.get('filters_list'));
+        const newFilter = await this.create_child_view(this.model.get('new_filter'));
+        this.el.appendChild(filtersList.el);
+        this.el.appendChild(newFilter.el);
     }
 }

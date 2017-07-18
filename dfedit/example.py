@@ -1,5 +1,5 @@
 import ipywidgets as widgets
-from traitlets import Instance, List, Dict, Unicode, observe, Tuple
+from traitlets import Instance, List, Dict, Unicode, observe, Tuple, default
 
 import pandas as pd
 
@@ -84,3 +84,20 @@ class NewFilter(widgets.DOMWidget):
         else:
             print('unknown')
             print(content)
+
+
+class TransformationsBox(widgets.DOMWidget):
+    _view_name = Unicode('TransformationsBoxView').tag(sync=True)
+    _model_name = Unicode('TransformationsBoxModel').tag(sync=True)
+    _view_module = Unicode('dfedit').tag(sync=True)
+    _model_module = Unicode('dfedit').tag(sync=True)
+    filters_list = Instance(FiltersList).tag(sync=True, **widgets.widget_serialization)
+    new_filter = Instance(NewFilter).tag(sync=True, **widgets.widget_serialization)
+
+    @default('filters_list')
+    def _default_filters_list(self):
+        return FiltersList()
+
+    @default('new_filter')
+    def _default_new_filter(self):
+        return NewFilter()
