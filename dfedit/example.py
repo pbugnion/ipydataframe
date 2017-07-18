@@ -39,6 +39,10 @@ class FiltersList(widgets.DOMWidget):
     children = Tuple(help="List of widget children").tag(
             sync=True, **widgets.widget_serialization)
 
+    def add_transformation(self, transformation):
+        new_children = list(self.children) + [transformation]
+        self.children = new_children
+
 
 class Transformation(object):
 
@@ -65,6 +69,11 @@ TRANSFORMATIONS = [
         Transformation('keywords-filter', 'Keywords filter', 'bla bla bla')
 ]
 
+TRANSFORMATION_IDS = {
+        'keywords-filter': StringsFilter,
+        'other-filter': StringsFilter
+}
+
 class NewFilter(widgets.DOMWidget):
     _view_name = Unicode('NewFilterView').tag(sync=True)
     _model_name = Unicode('NewFilterModel').tag(sync=True)
@@ -76,14 +85,17 @@ class NewFilter(widgets.DOMWidget):
 
     def __init__(self, *args, **kwargs):
         super(NewFilter, self).__init__(*args, **kwargs)
+        self._new_filter_callbacks = []
         self.on_msg(self._handle_message)
 
     def _handle_message(self, _1, content, _2):
         if content.get('event') == 'select':
-            print(content)
-        else:
-            print('unknown')
-            print(content)
+            filter_id = content['id']
+            for callback in self._new_filter_callbacks:
+                callback(filter_id)
+
+    def register_new_filter_callback(self, callback):
+        self._new_filter_callbacks.append(callback)
 
 
 class TransformationsBox(widgets.DOMWidget):
@@ -94,6 +106,10 @@ class TransformationsBox(widgets.DOMWidget):
     filters_list = Instance(FiltersList).tag(sync=True, **widgets.widget_serialization)
     new_filter = Instance(NewFilter).tag(sync=True, **widgets.widget_serialization)
 
+    def __init__(self, *args, **kwargs):
+        super(TransformationsBox, self).__init__(*args, **kwargs)
+        self.new_filter.register_new_filter_callback(self.add_filter)
+
     @default('filters_list')
     def _default_filters_list(self):
         return FiltersList()
@@ -101,3 +117,8 @@ class TransformationsBox(widgets.DOMWidget):
     @default('new_filter')
     def _default_new_filter(self):
         return NewFilter()
+
+    def add_filter(self, filter_id):
+        print('adding filter {}'.format(filter_id))
+        transformation = TRANSFORMATION_IDS[filter_id]()
+        self.filters_list.add_transformation(transformation)
