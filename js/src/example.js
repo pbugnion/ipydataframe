@@ -136,10 +136,19 @@ export class NewFilterView extends widgets.DOMWidgetView {
                 text: t.name
             };
         })
-        console.log(selectOptions);
 
         const select = document.createElement('select');
         this.el.appendChild(select);
-        $(select).select2({data: selectOptions});
+        const $select = $(select).select2({data: selectOptions});
+
+        $select.on("select2:select", (e) => {
+            console.log(e.params.data.id)
+            this.send(
+                {
+                    event: 'select',
+                    id: e.params.data.id
+                }
+            )
+        });
     }
 }

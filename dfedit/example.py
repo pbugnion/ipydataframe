@@ -61,6 +61,7 @@ transformation_serializers = {
 }
 
 TRANSFORMATIONS = [
+        Transformation('other-filter', 'Other filter', 'bla bla bla'),
         Transformation('keywords-filter', 'Keywords filter', 'bla bla bla')
 ]
 
@@ -73,3 +74,13 @@ class NewFilter(widgets.DOMWidget):
             default_value=TRANSFORMATIONS).tag(
                     sync=True, **transformation_serializers)
 
+    def __init__(self, *args, **kwargs):
+        super(NewFilter, self).__init__(*args, **kwargs)
+        self.on_msg(self._handle_message)
+
+    def _handle_message(self, _1, content, _2):
+        if content.get('event') == 'select':
+            print(content)
+        else:
+            print('unknown')
+            print(content)
