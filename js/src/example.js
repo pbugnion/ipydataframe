@@ -141,10 +141,27 @@ export class StringsFilterView extends widgets.DOMWidgetView {
 
         const select = document.createElement('select');
         this.el.appendChild(select);
-        return $(select).select2({data: options});
+        const $select = $(select).select2({data: options});
+        $select.on('select2:select', (e) => this._onColumnChange())
+        return $select
     }
 
     _renderOptionsSelect() {
+        const options = this._getValueSelectOptions()
+        const select = document.createElement('select');
+        select.setAttribute('multiple', 'multiple');
+        this.el.appendChild(select);
+        const $select = $(select)
+        this._initializeValueSelect($select, options);
+        return $select
+    }
+
+    _onColumnChange() {
+        const options = this._getValueSelectOptions()
+        this._initializeValueSelect(this.$valuesSelect, options);
+    }
+
+    _getValueSelectOptions() {
         const columnSelected = this.$columnsSelect.val();
         const uniqueValues = this.model.get('_sample')[columnSelected];
         const options = uniqueValues.map(value => {
@@ -153,10 +170,12 @@ export class StringsFilterView extends widgets.DOMWidgetView {
                 text: value
             };
         });
-        const select = document.createElement('select');
-        select.setAttribute('multiple', 'multiple');
-        this.el.appendChild(select);
-        return $(select).select2({tags: true, data: options});
+        return options;
+    }
+
+    _initializeValueSelect($select, options) {
+        $select.children("option").remove();
+        $select.select2({tags: true, data: options});
     }
 }
 
