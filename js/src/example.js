@@ -178,7 +178,6 @@ export class NewFilterView extends widgets.DOMWidgetView {
         const $select = $(select).select2({data: selectOptions});
 
         $select.on("select2:select", (e) => {
-            console.log(e.params.data.id)
             this.send(
                 {
                     event: 'select',
