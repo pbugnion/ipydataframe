@@ -36,16 +36,23 @@ class StringsFilter(widgets.DOMWidget):
     _model_module = Unicode('dfedit').tag(sync=True)
     _df = Instance(pd.DataFrame)
     _columns = List(Unicode()).tag(sync=True)
+    _sample = List().tag(sync=True)
 
     def __init__(self, df, *args, **kwargs):
         self.df = df
         self._columns = df.columns.tolist()
+        self._sample = self._calculate_unique_sample(df)
         super(StringsFilter, self).__init__(*args, **kwargs)
 
     @observe('df')
     def _update_columns(self, change):
         new_df = change['new']
         self._columns = new_df.columns.tolist()
+
+    def _calculate_unique_sample(self, df):
+        n = min(df.shape[0], 100)
+        sample_df = df.sample(n=n)
+        return [s.unique().tolist() for (_, s) in sample_df.items()]
 
 
 class FiltersList(widgets.DOMWidget):
