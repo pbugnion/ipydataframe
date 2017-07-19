@@ -56,7 +56,6 @@ class FiltersList(widgets.DOMWidget):
 
 
 class Transformation(object):
-
     def __init__(self, transformation_id, name, description):
         self.transformation_id = transformation_id
         self.name = name
