@@ -28,6 +28,18 @@ class StringsFilter(widgets.DOMWidget):
     _model_name = Unicode('StringsFilterModel').tag(sync=True)
     _view_module = Unicode('dfedit').tag(sync=True)
     _model_module = Unicode('dfedit').tag(sync=True)
+    _df = Instance(pd.DataFrame)
+    _columns = List(Unicode()).tag(sync=True)
+
+    def __init__(self, df, *args, **kwargs):
+        self.df = df
+        self._columns = df.columns.tolist()
+        super(StringsFilter, self).__init__(*args, **kwargs)
+
+    @observe('df')
+    def _update_columns(self, change):
+        new_df = change['new']
+        self._columns = new_df.columns.tolist()
 
 
 class FiltersList(widgets.DOMWidget):
@@ -105,7 +117,8 @@ class TransformationsBox(widgets.DOMWidget):
     filters_list = Instance(FiltersList).tag(sync=True, **widgets.widget_serialization)
     new_filter = Instance(NewFilter).tag(sync=True, **widgets.widget_serialization)
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, df, *args, **kwargs):
+        self.df = df
         super(TransformationsBox, self).__init__(*args, **kwargs)
         self.new_filter.register_new_filter_callback(self.add_filter)
 
@@ -119,7 +132,7 @@ class TransformationsBox(widgets.DOMWidget):
 
     def add_filter(self, filter_id):
         print('adding filter {}'.format(filter_id))
-        transformation = TRANSFORMATION_IDS[filter_id]()
+        transformation = TRANSFORMATION_IDS[filter_id](self.df)
         self.filters_list.add_transformation(transformation)
 
 
@@ -135,5 +148,5 @@ class DFTransformer(widgets.DOMWidget):
 
     def __init__(self, df, *args, **kwargs):
         self.dfviewer = DFViewer(df=df)
-        self.transformations_box = TransformationsBox()
+        self.transformations_box = TransformationsBox(df)
         super(DFTransformer, self).__init__(*args, **kwargs)

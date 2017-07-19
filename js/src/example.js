@@ -132,7 +132,7 @@ export class StringsFilterView extends widgets.DOMWidgetView {
     }
 
     _renderColumnsSelect() {
-        const options = ['c1', 'c2', 'c3', 'c4'];
+        const options = this.model.get('_columns');
         const select = document.createElement('select');
 
         const optionElements = options.forEach(optionValue => {
