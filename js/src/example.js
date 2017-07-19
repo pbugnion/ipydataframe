@@ -127,37 +127,36 @@ export class StringsFilterView extends widgets.DOMWidgetView {
         this.el.style.width = '600px';
         this.el.style.height = '100px';
 
-        this._renderColumnsSelect()
-        this._renderOptionsSelect()
+        this.$columnsSelect = this._renderColumnsSelect()
+        this.$valuesSelect = this._renderOptionsSelect()
     }
 
     _renderColumnsSelect() {
-        const options = this.model.get('_columns');
-        const select = document.createElement('select');
-
-        const optionElements = options.forEach(optionValue => {
-            const elem = document.createElement('option');
-            elem.text = optionValue;
-            elem.setAttribute('value', optionValue);
-            select.appendChild(elem);
+        const options = this.model.get('_columns').map((column, index) => {
+            return {
+                id: index,
+                text: column
+            };
         });
+
+        const select = document.createElement('select');
         this.el.appendChild(select);
-        $(select).select2();
+        return $(select).select2({data: options});
     }
 
     _renderOptionsSelect() {
-        const options = ['hello', 'world', 'alpha', 'beta'];
+        const columnSelected = this.$columnsSelect.val();
+        const uniqueValues = this.model.get('_sample')[columnSelected];
+        const options = uniqueValues.map(value => {
+            return {
+                id: value,
+                text: value
+            };
+        });
         const select = document.createElement('select');
         select.setAttribute('multiple', 'multiple');
-
-        const optionElements = options.forEach(optionValue => {
-            const elem = document.createElement('option');
-            elem.text = optionValue;
-            elem.setAttribute('value', optionValue);
-            select.appendChild(elem);
-        });
         this.el.appendChild(select);
-        $(select).select2({tags: true});
+        return $(select).select2({tags: true, data: options});
     }
 }
 
