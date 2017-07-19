@@ -16,6 +16,12 @@ class DFViewer(widgets.DOMWidget):
     _columns = List(Unicode()).tag(sync=True)
     _data = List().tag(sync=True)
 
+    def __init__(self, df, *args, **kwargs):
+        self._df = df
+        self._columns = df.columns.tolist()
+        self._data = df.values.tolist()
+        super(DFViewer, self).__init__(*args, **kwargs)
+
     @observe('df')
     def _update_columns_data(self, change):
         new_df = change['new']
@@ -146,6 +152,6 @@ class DFTransformer(widgets.DOMWidget):
             sync=True, **widgets.widget_serialization)
 
     def __init__(self, df, *args, **kwargs):
-        self.dfviewer = DFViewer(df=df)
+        self.dfviewer = DFViewer(df)
         self.transformations_box = TransformationsBox(df)
         super(DFTransformer, self).__init__(*args, **kwargs)
