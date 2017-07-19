@@ -125,7 +125,7 @@ export class DFWidgetView extends widgets.DOMWidgetView {
 export class StringsFilterView extends widgets.DOMWidgetView {
     render() {
         this.el.style.width = '600px';
-        this.el.style.height = '400px';
+        this.el.style.height = '100px';
 
         this._renderColumnsSelect()
         this._renderOptionsSelect()
