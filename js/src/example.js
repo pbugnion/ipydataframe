@@ -80,6 +80,24 @@ export class TransformationsBoxModel extends widgets.DOMWidgetModel {
     }
 }
 
+export class DFTransformerModel extends widgets.DOMWidgetModel {
+    defaults() {
+        return {
+            ...super.defaults(),
+            _model_name: 'DFTransformerModel',
+            _view_name: 'DFTransformerView',
+            _model_module: 'dfedit',
+            _view_module: 'dfedit'
+        }
+    }
+
+    static serializers = {
+        ...widgets.DOMWidgetModel.serializers,
+        dfviewer: {deserialize: widgets.unpack_models},
+        transformations_box: {deserialize: widgets.unpack_models}
+    }
+}
+
 export class DFWidgetView extends widgets.DOMWidgetView {
     render() {
         const columns = this.model.get('_columns');
@@ -177,5 +195,15 @@ export class TransformationsBoxView extends widgets.DOMWidgetView {
         const newFilter = await this.create_child_view(this.model.get('new_filter'));
         this.el.appendChild(filtersList.el);
         this.el.appendChild(newFilter.el);
+    }
+}
+
+export class DFTransformerView extends widgets.DOMWidgetView {
+    async render() {
+        const transformationsBox = await this.create_child_view(
+            this.model.get('transformations_box'));
+        const dfViewer = await this.create_child_view(this.model.get('dfviewer'));
+        this.el.appendChild(transformationsBox.el);
+        this.el.appendChild(dfViewer.el);
     }
 }

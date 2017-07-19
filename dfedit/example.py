@@ -4,7 +4,7 @@ from traitlets import Instance, List, Dict, Unicode, observe, Tuple, default
 import pandas as pd
 
 
-class DFWidget(widgets.DOMWidget):
+class DFViewer(widgets.DOMWidget):
     """"""
     df = Instance(pd.DataFrame)
     _view_name = Unicode('DFWidgetView').tag(sync=True)
@@ -121,3 +121,19 @@ class TransformationsBox(widgets.DOMWidget):
         print('adding filter {}'.format(filter_id))
         transformation = TRANSFORMATION_IDS[filter_id]()
         self.filters_list.add_transformation(transformation)
+
+
+class DFTransformer(widgets.DOMWidget):
+    _view_name = Unicode('DFTransformerView').tag(sync=True)
+    _model_name = Unicode('DFTransformerModel').tag(sync=True)
+    _view_module = Unicode('dfedit').tag(sync=True)
+    _model_module = Unicode('dfedit').tag(sync=True)
+    dfviewer = Instance(DFViewer).tag(
+            sync=True, **widgets.widget_serialization)
+    transformations_box = Instance(TransformationsBox).tag(
+            sync=True, **widgets.widget_serialization)
+
+    def __init__(self, df, *args, **kwargs):
+        self.dfviewer = DFViewer(df=df)
+        self.transformations_box = TransformationsBox()
+        super(DFTransformer, self).__init__(*args, **kwargs)
