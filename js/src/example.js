@@ -29,8 +29,10 @@ export class StringsFilterModel extends widgets.DOMWidgetModel {
             _view_name: 'StringFilterView',
             _model_module: 'dfedit',
             _view_module: 'dfedit',
-            _column: null,
-            filterValue: []
+            columns: [],
+            unique_values: [],
+            index_column_selected: null,
+            filter_value: []
         }
     }
 };
@@ -132,7 +134,7 @@ export class StringsFilterView extends widgets.DOMWidgetView {
     }
 
     _renderColumnsSelect() {
-        const options = this.model.get('_columns').map((column, index) => {
+        const options = this.model.get('columns').map((column, index) => {
             return {
                 id: index,
                 text: column
@@ -142,6 +144,7 @@ export class StringsFilterView extends widgets.DOMWidgetView {
         const select = document.createElement('select');
         this.el.appendChild(select);
         const $select = $(select).select2({data: options});
+        $select.val(this.model.get('index_column_selected'));
         $select.on('select2:select', (e) => this._onColumnChange())
         return $select
     }
@@ -163,7 +166,7 @@ export class StringsFilterView extends widgets.DOMWidgetView {
 
     _getValueSelectOptions() {
         const columnSelected = this.$columnsSelect.val();
-        const uniqueValues = this.model.get('_sample')[columnSelected];
+        const uniqueValues = this.model.get('unique_values')[columnSelected];
         const options = uniqueValues.map(value => {
             return {
                 id: value,
