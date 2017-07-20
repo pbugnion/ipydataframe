@@ -48,9 +48,17 @@ class StringsFilter(widgets.DOMWidget):
         self._set_traits(df)
         super(StringsFilter, self).__init__(*args, **kwargs)
 
+    @observe('index_column_selected')
+    def _on_index_change(self, change):
+        self._update_out_df()
+
+    @observe('filter_value')
+    def _on_filter_change(self, change):
+        self._update_out_df()
+
     def _set_traits(self, df):
         self.in_df = df
-        self.out_df = 2*self.in_df
+        self.out_df = df
         self.columns = df.columns.tolist()
         self.unique_values = self._calculate_unique_sample(df)
         if len(self.columns):
@@ -63,6 +71,18 @@ class StringsFilter(widgets.DOMWidget):
         n = min(df.shape[0], 100)
         sample_df = df.sample(n=n)
         return [s.unique().tolist() for (_, s) in sample_df.items()]
+
+    def _update_out_df(self):
+        column = self.in_df.columns[self.index_column_selected]
+        self.out_df = self._calculate_transformation(
+                self.in_df, column, self.filter_value)
+
+    def _calculate_transformation(self, df, column, filter_value):
+        if not filter_value:
+            out_df = df
+        else:
+            out_df = df[df[column].isin(filter_value)]
+        return out_df
 
 
 class FiltersList(widgets.DOMWidget):
