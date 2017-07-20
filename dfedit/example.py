@@ -1,5 +1,8 @@
 import ipywidgets as widgets
-from traitlets import Instance, List, Dict, Unicode, observe, Tuple, default
+from traitlets import (
+        Instance, List, Dict, Unicode, observe, Tuple, default, Integer,
+        dlink
+)
 
 import pandas as pd
 
@@ -34,20 +37,27 @@ class StringsFilter(widgets.DOMWidget):
     _model_name = Unicode('StringsFilterModel').tag(sync=True)
     _view_module = Unicode('dfedit').tag(sync=True)
     _model_module = Unicode('dfedit').tag(sync=True)
-    _df = Instance(pd.DataFrame)
-    _columns = List(Unicode()).tag(sync=True)
-    _sample = List().tag(sync=True)
+    in_df = Instance(pd.DataFrame)
+    out_df = Instance(pd.DataFrame)
+    columns = List(Unicode()).tag(sync=True)
+    unique_values = List().tag(sync=True)
+    index_column_selected = Integer(allow_none=True).tag(sync=True)
+    filter_value = List().tag(sync=True)
 
     def __init__(self, df, *args, **kwargs):
-        self.df = df
-        self._columns = df.columns.tolist()
-        self._sample = self._calculate_unique_sample(df)
+        self._set_traits(df)
         super(StringsFilter, self).__init__(*args, **kwargs)
 
-    @observe('df')
-    def _update_columns(self, change):
-        new_df = change['new']
-        self._columns = new_df.columns.tolist()
+    def _set_traits(self, df):
+        self.in_df = df
+        self.out_df = 2*self.in_df
+        self.columns = df.columns.tolist()
+        self.unique_values = self._calculate_unique_sample(df)
+        if len(self.columns):
+            self.index_column_selected = 0
+        else:
+            self.index_column_selected = None
+        self.filter_value = []
 
     def _calculate_unique_sample(self, df):
         n = min(df.shape[0], 100)
@@ -62,10 +72,25 @@ class FiltersList(widgets.DOMWidget):
     _model_module = Unicode('dfedit').tag(sync=True)
     children = Tuple(help="List of widget children").tag(
             sync=True, **widgets.widget_serialization)
+    in_df = Instance(pd.DataFrame)
+    out_df = Instance(pd.DataFrame)
 
-    def add_transformation(self, transformation):
-        new_children = list(self.children) + [transformation]
-        self.children = new_children
+    def __init__(self, df, *args, **kwargs):
+        self.in_df = df
+        super(FiltersList, self).__init__(*args, **kwargs)
+        self.in_df_link = dlink((self, 'in_df'), (self, 'out_df'))
+        self.out_df_link = None
+
+    def add_transformation(self, transformation_id):
+        try:
+            last_child = self.children[-1]
+        except IndexError:
+            new_transformation = TRANSFORMATION_IDS[transformation_id](self.in_df)
+            self.children = [new_transformation]
+            self.out_df = new_transformation.out_df
+            self.in_df_link.unlink()
+            self.in_df_link = dlink((self, 'in_df'), (new_transformation, 'in_df'))
+            self.out_df_link = dlink((new_transformation, 'out_df'), (self, 'out_df'))
 
 
 class Transformation(object):
@@ -128,24 +153,19 @@ class TransformationsBox(widgets.DOMWidget):
     _model_module = Unicode('dfedit').tag(sync=True)
     filters_list = Instance(FiltersList).tag(sync=True, **widgets.widget_serialization)
     new_filter = Instance(NewFilter).tag(sync=True, **widgets.widget_serialization)
+    out_df = Instance(pd.DataFrame)
 
     def __init__(self, df, *args, **kwargs):
-        self.df = df
+        self.filters_list = FiltersList(df)
+        self.new_filter = NewFilter()
+        self.out_df = df
         super(TransformationsBox, self).__init__(*args, **kwargs)
         self.new_filter.register_new_filter_callback(self.add_filter)
-
-    @default('filters_list')
-    def _default_filters_list(self):
-        return FiltersList()
-
-    @default('new_filter')
-    def _default_new_filter(self):
-        return NewFilter()
+        dlink((self.filters_list, 'out_df'), (self, 'out_df'))
 
     def add_filter(self, filter_id):
         print('adding filter {}'.format(filter_id))
-        transformation = TRANSFORMATION_IDS[filter_id](self.df)
-        self.filters_list.add_transformation(transformation)
+        self.filters_list.add_transformation(filter_id)
 
 
 class DFTransformer(widgets.DOMWidget):
@@ -162,3 +182,4 @@ class DFTransformer(widgets.DOMWidget):
         self.dfviewer = DFViewer(df)
         self.transformations_box = TransformationsBox(df)
         super(DFTransformer, self).__init__(*args, **kwargs)
+        dlink((self.transformations_box, 'out_df'), (self.dfviewer, 'df'))
