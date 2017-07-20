@@ -135,7 +135,7 @@ export class DFWidgetView extends widgets.DOMWidgetView {
 export class StringsFilterView extends widgets.DOMWidgetView {
     render() {
         this.el.style.width = '600px';
-        this.el.style.height = '100px';
+        this.el.style.height = '50px';
 
         this.$columnsSelect = this._renderColumnsSelect()
         this.$valuesSelect = this._renderOptionsSelect()
@@ -161,6 +161,7 @@ export class StringsFilterView extends widgets.DOMWidgetView {
         const options = this._getValueSelectOptions()
         const select = document.createElement('select');
         select.setAttribute('multiple', 'multiple');
+        select.style.width = '200px';
         this.el.appendChild(select);
         const $select = $(select)
         this._initializeValueSelect($select, options);
