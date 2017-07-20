@@ -7,7 +7,7 @@ node_modules/
 *.swp
 
 # Compiled javascript
-dfedit/static/
+ipydataframe/static/
 
 # OS X
 .DS_Store

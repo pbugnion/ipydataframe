@@ -12,8 +12,8 @@ class DFViewer(widgets.DOMWidget):
     df = Instance(pd.DataFrame)
     _view_name = Unicode('DFWidgetView').tag(sync=True)
     _model_name = Unicode('DFWidgetModel').tag(sync=True)
-    _view_module = Unicode('dfedit').tag(sync=True)
-    _model_module = Unicode('dfedit').tag(sync=True)
+    _view_module = Unicode('ipydataframe').tag(sync=True)
+    _model_module = Unicode('ipydataframe').tag(sync=True)
     _view_module_version = Unicode('^0.1.0').tag(sync=True)
     _model_module_version = Unicode('^0.1.0').tag(sync=True)
     _columns = List(Unicode()).tag(sync=True)
@@ -35,8 +35,8 @@ class DFViewer(widgets.DOMWidget):
 class StringsFilter(widgets.DOMWidget):
     _view_name = Unicode('StringsFilterView').tag(sync=True)
     _model_name = Unicode('StringsFilterModel').tag(sync=True)
-    _view_module = Unicode('dfedit').tag(sync=True)
-    _model_module = Unicode('dfedit').tag(sync=True)
+    _view_module = Unicode('ipydataframe').tag(sync=True)
+    _model_module = Unicode('ipydataframe').tag(sync=True)
     in_df = Instance(pd.DataFrame)
     out_df = Instance(pd.DataFrame)
     columns = List(Unicode()).tag(sync=True)
@@ -88,8 +88,8 @@ class StringsFilter(widgets.DOMWidget):
 class FiltersList(widgets.DOMWidget):
     _view_name = Unicode('FiltersListView').tag(sync=True)
     _model_name = Unicode('FiltersListModel').tag(sync=True)
-    _view_module = Unicode('dfedit').tag(sync=True)
-    _model_module = Unicode('dfedit').tag(sync=True)
+    _view_module = Unicode('ipydataframe').tag(sync=True)
+    _model_module = Unicode('ipydataframe').tag(sync=True)
     children = Tuple(help="List of widget children").tag(
             sync=True, **widgets.widget_serialization)
     in_df = Instance(pd.DataFrame)
@@ -145,8 +145,8 @@ TRANSFORMATION_IDS = {
 class NewFilter(widgets.DOMWidget):
     _view_name = Unicode('NewFilterView').tag(sync=True)
     _model_name = Unicode('NewFilterModel').tag(sync=True)
-    _view_module = Unicode('dfedit').tag(sync=True)
-    _model_module = Unicode('dfedit').tag(sync=True)
+    _view_module = Unicode('ipydataframe').tag(sync=True)
+    _model_module = Unicode('ipydataframe').tag(sync=True)
     transformations = List(Instance(Transformation),
             default_value=TRANSFORMATIONS).tag(
                     sync=True, **transformation_serializers)
@@ -169,8 +169,8 @@ class NewFilter(widgets.DOMWidget):
 class TransformationsBox(widgets.DOMWidget):
     _view_name = Unicode('TransformationsBoxView').tag(sync=True)
     _model_name = Unicode('TransformationsBoxModel').tag(sync=True)
-    _view_module = Unicode('dfedit').tag(sync=True)
-    _model_module = Unicode('dfedit').tag(sync=True)
+    _view_module = Unicode('ipydataframe').tag(sync=True)
+    _model_module = Unicode('ipydataframe').tag(sync=True)
     filters_list = Instance(FiltersList).tag(sync=True, **widgets.widget_serialization)
     new_filter = Instance(NewFilter).tag(sync=True, **widgets.widget_serialization)
     out_df = Instance(pd.DataFrame)
@@ -190,8 +190,8 @@ class TransformationsBox(widgets.DOMWidget):
 class DFTransformer(widgets.DOMWidget):
     _view_name = Unicode('DFTransformerView').tag(sync=True)
     _model_name = Unicode('DFTransformerModel').tag(sync=True)
-    _view_module = Unicode('dfedit').tag(sync=True)
-    _model_module = Unicode('dfedit').tag(sync=True)
+    _view_module = Unicode('ipydataframe').tag(sync=True)
+    _model_module = Unicode('ipydataframe').tag(sync=True)
     dfviewer = Instance(DFViewer).tag(
             sync=True, **widgets.widget_serialization)
     transformations_box = Instance(TransformationsBox).tag(

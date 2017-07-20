@@ -1,1 +1,1 @@
-recursive-include dfedit/static *.*
+recursive-include ipydataframe/static *.*

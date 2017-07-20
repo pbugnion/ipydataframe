@@ -66,8 +66,8 @@ class NPM(Command):
     node_modules = os.path.join(node_root, 'node_modules')
 
     targets = [
-        os.path.join(here, 'dfedit', 'static', 'extension.js'),
-        os.path.join(here, 'dfedit', 'static', 'index.js')
+        os.path.join(here, 'ipydataframe', 'static', 'extension.js'),
+        os.path.join(here, 'ipydataframe', 'static', 'index.js')
     ]
 
     def initialize_options(self):
@@ -112,20 +112,20 @@ class NPM(Command):
         update_package_data(self.distribution)
 
 version_ns = {}
-with open(os.path.join(here, 'dfedit', '_version.py')) as f:
+with open(os.path.join(here, 'ipydataframe', '_version.py')) as f:
     exec(f.read(), {}, version_ns)
 
 setup_args = {
-    'name': 'dfedit',
+    'name': 'ipydataframe',
     'version': version_ns['__version__'],
-    'description': 'A Custom Jupyter Widget Library',
+    'description': 'Transform dataframes interactively in Jupyter notebooks',
     'long_description': LONG_DESCRIPTION,
     'include_package_data': True,
     'data_files': [
-        ('share/jupyter/nbextensions/dfedit', [
-            'dfedit/static/extension.js',
-            'dfedit/static/index.js',
-            'dfedit/static/index.js.map',
+        ('share/jupyter/nbextensions/ipydataframe', [
+            'ipydataframe/static/extension.js',
+            'ipydataframe/static/index.js',
+            'ipydataframe/static/index.js.map',
         ]),
     ],
     'install_requires': [
@@ -157,9 +157,8 @@ setup_args = {
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
     ],
 }
 

@@ -1,12 +1,12 @@
 {
-  "name": "dfedit",
+  "name": "ipydataframe",
   "version": "0.1.0",
-  "description": "Edit Pandas dataframes",
+  "description": "Transform dataframes interactively in Jupyter notebooks",
   "author": "Pascal Bugnion",
   "main": "src/index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/pbugnion/dfedit.git"
+    "url": "https://github.com/pbugnion/ipydataframe.git"
   },
   "keywords": [
     "jupyter",

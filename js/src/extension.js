@@ -7,7 +7,7 @@ if (window.require) {
     window.require.config({
         map: {
             "*" : {
-                "dfedit": "nbextensions/dfedit/index",
+                "ipydataframe": "nbextensions/ipydataframe/index",
                 "jupyter-js-widgets": "nbextensions/jupyter-js-widgets/extension"
             }
         }

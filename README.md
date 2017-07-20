@@ -1,21 +1,23 @@
-dfedit
-===============================
+ipydataframe
+============
 
-A Custom Jupyter Widget Library
+Transform dataframes interactively in Jupyter notebooks
+
+This is not suitable for widespread consumption yet.
 
 Installation
 ------------
 
 To install use pip:
 
-    $ pip install dfedit
-    $ jupyter nbextension enable --py --sys-prefix dfedit
+    $ pip install ipydataframe
+    $ jupyter nbextension enable --py --sys-prefix ipydataframe
 
 
 For a development installation (requires npm),
 
-    $ git clone https://github.com/pbugnion/dfedit.git
-    $ cd dfedit
+    $ git clone https://github.com/pbugnion/ipydataframe.git
+    $ cd ipydataframe
     $ pip install -e .
-    $ jupyter nbextension install --py --symlink --sys-prefix dfedit
-    $ jupyter nbextension enable --py --sys-prefix dfedit
+    $ jupyter nbextension install --py --symlink --sys-prefix ipydataframe
+    $ jupyter nbextension enable --py --sys-prefix ipydataframe

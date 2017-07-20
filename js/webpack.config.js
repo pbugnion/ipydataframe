@@ -22,7 +22,7 @@ module.exports = [
         entry: './src/extension.js',
         output: {
             filename: 'extension.js',
-            path: __dirname + '/../dfedit/static',
+            path: __dirname + '/../ipydataframe/static',
             libraryTarget: 'amd'
         }
     },
@@ -35,7 +35,7 @@ module.exports = [
         entry: ['babel-polyfill', './src/index.js'],
         output: {
             filename: 'index.js',
-            path: __dirname + '/../dfedit/static',
+            path: __dirname + '/../ipydataframe/static',
             libraryTarget: 'amd'
         },
         devtool: 'source-map',
@@ -44,7 +44,7 @@ module.exports = [
         },
         externals: ['jupyter-js-widgets']
     },
-    {// Embeddable dfedit bundle
+    {// Embeddable ipydataframe bundle
      //
      // This bundle is generally almost identical to the notebook bundle
      // containing the custom widget views and models.
@@ -63,7 +63,7 @@ module.exports = [
             filename: 'index.js',
             path: __dirname + '/dist/',
             libraryTarget: 'amd',
-            publicPath: 'https://unpkg.com/dfedit@' + version + '/dist/'
+            publicPath: 'https://unpkg.com/ipydataframe@' + version + '/dist/'
         },
         devtool: 'source-map',
         module: {

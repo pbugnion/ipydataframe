@@ -11,8 +11,8 @@ export class DFWidgetModel extends widgets.DOMWidgetModel {
             ...super.defaults(),
             _model_name: 'DFWidgetModel',
             _view_name: 'DFWidgetView',
-            _model_module: 'dfedit',
-            _view_module: 'dfedit',
+            _model_module: 'ipydataframe',
+            _view_module: 'ipydataframe',
             _model_module_version: '0.1.0',
             _view_module_version: '0.1.0',
             _columns: [],
@@ -27,8 +27,8 @@ export class StringsFilterModel extends widgets.DOMWidgetModel {
             ...super.defaults(),
             _model_name: 'StringFilter',
             _view_name: 'StringFilterView',
-            _model_module: 'dfedit',
-            _view_module: 'dfedit',
+            _model_module: 'ipydataframe',
+            _view_module: 'ipydataframe',
             columns: [],
             unique_values: [],
             index_column_selected: null,
@@ -44,8 +44,8 @@ export class FiltersListModel extends widgets.VBoxModel {
             ...super.defaults(),
             _model_name: 'StringFilter',
             _view_name: 'StringFilterView',
-            _model_module: 'dfedit',
-            _view_module: 'dfedit',
+            _model_module: 'ipydataframe',
+            _view_module: 'ipydataframe',
             children: [],
             box_style: ''
         }
@@ -58,8 +58,8 @@ export class NewFilterModel extends widgets.DOMWidgetModel {
             ...super.defaults(),
             _model_name: 'NewFiltersModel',
             _view_name: 'NewFiltersView',
-            _model_module: 'dfedit',
-            _view_module: 'dfedit',
+            _model_module: 'ipydataframe',
+            _view_module: 'ipydataframe',
         }
     }
 }
@@ -70,8 +70,8 @@ export class TransformationsBoxModel extends widgets.DOMWidgetModel {
             ...super.defaults(),
             _model_name: 'TransformationsBoxModel',
             _view_name: 'TransformationsBoxView',
-            _model_module: 'dfedit',
-            _view_module: 'dfedit'
+            _model_module: 'ipydataframe',
+            _view_module: 'ipydataframe'
         }
     }
 
@@ -88,8 +88,8 @@ export class DFTransformerModel extends widgets.DOMWidgetModel {
             ...super.defaults(),
             _model_name: 'DFTransformerModel',
             _view_name: 'DFTransformerView',
-            _model_module: 'dfedit',
-            _view_module: 'dfedit'
+            _model_module: 'ipydataframe',
+            _view_module: 'ipydataframe'
         }
     }
 
@@ -115,7 +115,7 @@ export class DFWidgetView extends widgets.DOMWidgetView {
         this.el.style.width = '600px';
         this.el.style.height = '400px';
 
-        this.el.className += ' dfedit-table';
+        this.el.className += ' ipydataframe-table';
 
         const grid = new Slick.Grid(this.el, this._getGridData(), slickColumns, options);
         this.listenTo(this.model, 'change:_data', () => {
