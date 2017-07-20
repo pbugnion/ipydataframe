@@ -184,7 +184,6 @@ class TransformationsBox(widgets.DOMWidget):
         dlink((self.filters_list, 'out_df'), (self, 'out_df'))
 
     def add_filter(self, filter_id):
-        print('adding filter {}'.format(filter_id))
         self.filters_list.add_transformation(filter_id)
 
 
