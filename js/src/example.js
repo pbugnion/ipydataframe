@@ -121,6 +121,13 @@ export class DFWidgetView extends widgets.DOMWidgetView {
         this.el.className += ' dfedit-table';
 
         const grid = new Slick.Grid(this.el, slickData, slickColumns, options);
+        this.listenTo(this.model, 'change:_data', () => {
+            const slickData = this.model.get('_data').map(row => {
+                return _.object(columns, row);
+            });
+            grid.setData(slickData);
+            grid.render();
+        });
     }
 };
 
