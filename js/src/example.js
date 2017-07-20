@@ -106,9 +106,6 @@ export class DFWidgetView extends widgets.DOMWidgetView {
         const slickColumns = columns.map(name => {
             return {id: name, name: name, field: name};
         });
-        const slickData = this.model.get('_data').map(row => {
-            return _.object(columns, row);
-        });
 
         const options = {
             enableCellNavigation: true,
@@ -120,13 +117,17 @@ export class DFWidgetView extends widgets.DOMWidgetView {
 
         this.el.className += ' dfedit-table';
 
-        const grid = new Slick.Grid(this.el, slickData, slickColumns, options);
+        const grid = new Slick.Grid(this.el, this._getGridData(), slickColumns, options);
         this.listenTo(this.model, 'change:_data', () => {
-            const slickData = this.model.get('_data').map(row => {
-                return _.object(columns, row);
-            });
-            grid.setData(slickData);
+            grid.setData(this._getGridData());
             grid.render();
+        });
+    }
+
+    _getGridData() {
+        const columns = this.model.get('_columns');
+        return this.model.get('_data').map(row => {
+            return _.object(columns, row);
         });
     }
 };
