@@ -18,5 +18,5 @@ require('./ipydataframe.css');
 
 // Export widget models and views, and the npm package version number.
 export * from './DFTransformer'
-export * from './DFView'
+export * from './TabularData'
 export { version } from '../package.json'

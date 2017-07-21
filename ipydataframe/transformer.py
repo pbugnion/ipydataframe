@@ -10,8 +10,8 @@ import pandas as pd
 class DFViewer(widgets.DOMWidget):
     """"""
     df = Instance(pd.DataFrame)
-    _view_name = Unicode('DFWidgetView').tag(sync=True)
-    _model_name = Unicode('DFWidgetModel').tag(sync=True)
+    _view_name = Unicode('TabularDataView').tag(sync=True)
+    _model_name = Unicode('TabularDataModel').tag(sync=True)
     _view_module = Unicode('ipydataframe').tag(sync=True)
     _model_module = Unicode('ipydataframe').tag(sync=True)
     _view_module_version = Unicode('^0.1.0').tag(sync=True)

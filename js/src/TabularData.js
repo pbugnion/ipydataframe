@@ -2,7 +2,7 @@ import widgets from 'jupyter-js-widgets';
 
 import Slick from './vendor/slickgrid-2.3.6';
 
-export class DFWidgetModel extends widgets.DOMWidgetModel {
+export class TabularDataModel extends widgets.DOMWidgetModel {
     defaults() {
         return {
             ...super.defaults(),
@@ -18,7 +18,7 @@ export class DFWidgetModel extends widgets.DOMWidgetModel {
     }
 };
 
-export class DFWidgetView extends widgets.DOMWidgetView {
+export class TabularDataView extends widgets.DOMWidgetView {
     render() {
         const columns = this.model.get('_columns');
         const slickColumns = columns.map(name => {
