@@ -153,7 +153,7 @@ export class StringsFilterView extends widgets.DOMWidgetView {
         this.el.appendChild(select);
         const $select = $(select).select2({data: options});
         $select.val(this.model.get('index_column_selected'));
-        $select.on('select2:select', e => this._onColumnChange())
+        $select.on('change', e => this._onColumnChange())
         return $select
     }
 
@@ -165,7 +165,7 @@ export class StringsFilterView extends widgets.DOMWidgetView {
         this.el.appendChild(select);
         const $select = $(select)
         this._initializeValueSelect($select, options);
-        $select.on('select2:select', e => this._onFilterChange())
+        $select.on('change', e => this._onFilterChange())
         return $select
     }
 
