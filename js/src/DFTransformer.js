@@ -194,7 +194,7 @@ export class StringsFilterView extends widgets.DOMWidgetView {
     }
 
     _initializeValueSelect($select, options) {
-        $select.children("option").remove();
+        $select.children('option').remove();
         $select.select2({tags: true, data: options});
     }
 }
@@ -215,7 +215,7 @@ export class NewFilterView extends widgets.DOMWidgetView {
         this.el.appendChild(select);
         const $select = $(select).select2({data: selectOptions});
 
-        $select.on("select2:select", (e) => {
+        $select.on('select2:select', (e) => {
             this.send(
                 {
                     event: 'select',
