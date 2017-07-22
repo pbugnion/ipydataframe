@@ -32,9 +32,9 @@ class DFViewer(widgets.DOMWidget):
         self._data = new_df.values.tolist()
 
 
-class StringsFilter(widgets.DOMWidget):
-    _view_name = Unicode('StringsFilterView').tag(sync=True)
-    _model_name = Unicode('StringsFilterModel').tag(sync=True)
+class EqualityFilter(widgets.DOMWidget):
+    _view_name = Unicode('EqualityFilterView').tag(sync=True)
+    _model_name = Unicode('EqualityFilterModel').tag(sync=True)
     _view_module = Unicode('ipydataframe').tag(sync=True)
     _model_module = Unicode('ipydataframe').tag(sync=True)
     in_df = Instance(pd.DataFrame)
@@ -46,7 +46,7 @@ class StringsFilter(widgets.DOMWidget):
 
     def __init__(self, df, *args, **kwargs):
         self._set_traits(df)
-        super(StringsFilter, self).__init__(*args, **kwargs)
+        super(EqualityFilter, self).__init__(*args, **kwargs)
 
     @observe('index_column_selected')
     def _on_index_change(self, change):
@@ -138,8 +138,8 @@ TRANSFORMATIONS = [
 ]
 
 TRANSFORMATION_IDS = {
-        'keywords-filter': StringsFilter,
-        'other-filter': StringsFilter
+        'keywords-filter': EqualityFilter,
+        'other-filter': EqualityFilter
 }
 
 class NewFilter(widgets.DOMWidget):
