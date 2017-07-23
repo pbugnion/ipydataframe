@@ -4,6 +4,7 @@
 // dynamic baseURL for the static assets and may load some css that would
 // already be loaded by the notebook otherwise.
 
-// Export widget models and views, and the npm package version number.
-module.exports = require('./example.js');
-module.exports['version'] = require('../package.json').version;
+export * from './DFTransformer'
+export * from './TabularData'
+export * from './EqualityFilter'
+export { version } from '../package.json'
