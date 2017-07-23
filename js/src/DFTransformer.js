@@ -4,12 +4,12 @@ import $ from 'jquery';
 import 'select2';
 
 
-export class FiltersListModel extends widgets.VBoxModel {
+export class FiltersListModel extends widgets.DOMWidgetModel {
     defaults() {
         return {
             ...super.defaults(),
-            _model_name: 'StringFilter',
-            _view_name: 'StringFilterView',
+            _model_name: 'FiltersListModel',
+            _view_name: 'FiltersListView',
             _model_module: 'ipydataframe',
             _view_module: 'ipydataframe',
             children: [],
