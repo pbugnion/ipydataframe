@@ -64,4 +64,19 @@ describe('EqualityFilter#with_dataframe', () => {
         });
     });
 
+    it('have the right column selected', () => {
+        const firstSelect = view.$el.find('select')[0];
+        expect($(firstSelect).select2().val()).to.equal(`${indexColumnSelected}`);
+    });
+
+    it('have the unique values for the selected column as options to the second select', () => {
+        const secondSelect = view.$el.find('select')[1];
+        const options = $(secondSelect).find('option');
+        
+        expect(options.toArray().map((el) => el.text))
+            .to.deep.equal(uniqueValues[indexColumnSelected]);
+        expect(options.toArray().map((el) => el.getAttribute('value')))
+            .to.deep.equal(uniqueValues[indexColumnSelected]);
+    });
+
 });
