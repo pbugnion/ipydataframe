@@ -69,7 +69,10 @@ export class EqualityFilterView extends widgets.DOMWidgetView {
 
     _getValueSelectOptions() {
         const columnSelected = this.$columnsSelect.val();
-        const uniqueValues = this.model.get('unique_values')[columnSelected];
+        let uniqueValues = [];
+        if (columnSelected !== null) {
+            uniqueValues = this.model.get('unique_values')[columnSelected];
+        }
         const options = uniqueValues.map(value => {
             return {
                 id: value,

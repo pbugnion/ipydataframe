@@ -24,7 +24,6 @@ export class DummyManager extends widgets.ManagerBase {
 
     loadClass(className, moduleName, moduleVersion) {
         if (moduleName === 'ipydataframe') {
-            console.error('in module');
             if (ipydataframeWidgets[className]) {
                 return Promise.resolve(ipydataframeWidgets[className]);
             }
