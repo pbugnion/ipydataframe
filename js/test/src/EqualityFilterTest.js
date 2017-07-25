@@ -115,3 +115,33 @@ describe('EqualityFilter#afterColumnSelect', () => {
         expect(model.get('filter_value')).to.deep.equal([]);
     });
 });
+
+describe('EqualityFilter#afterFilterSelect', () => {
+    let manager;
+    let model;
+    let view;
+    const columns = ['first-column', 'second-column', 'third-column']
+    const uniqueValues = [['a', 'b'], [1, 2, 3], ['x', 'y', 1]]
+    const indexColumnSelected = 0;
+    const filterValue = ['a'];
+
+    beforeEach(async () => {
+        manager = new DummyManager();
+        const attributes = {
+            columns,
+            unique_values: uniqueValues,
+            index_column_selected: indexColumnSelected,
+            filter_value: filterValue
+        }
+        model = new EqualityFilterModel(attributes, { model_id: modelId, widget_manager: manager });
+        view = new EqualityFilterView({ model });
+        await view.render();
+        const [columnSelect, valuesSelect] = view.$el.find('select').toArray();
+        $(columnSelect).select2().val('2').trigger('change');
+        $(valuesSelect).select2().val(['x', 'y']).trigger('change');
+    });
+
+    it('set the model filter value', () => {
+        expect(model.get('filter_value')).to.deep.equal(['x', 'y']);
+    });
+});
