@@ -33,7 +33,7 @@ describe('EqualityFilter#withDataframe', () => {
     const columns = ['first-column', 'second-column', 'third-column']
     const uniqueValues = [['a', 'b'], [1, 2, 3], ['x', 'y', 1]]
     const indexColumnSelected = 0;
-    const filterValue = [];
+    const filterValue = ['a'];
 
     beforeEach(async () => {
         manager = new DummyManager();
@@ -77,6 +77,11 @@ describe('EqualityFilter#withDataframe', () => {
             .to.deep.equal(uniqueValues[indexColumnSelected]);
         expect(options.map((el) => el.getAttribute('value')))
             .to.deep.equal(uniqueValues[indexColumnSelected]);
+    });
+
+    it('have the right filter value selected', () => {
+        const secondSelect = view.$el.find('select')[1];
+        expect($(secondSelect).val()).to.deep.equal(filterValue);
     });
 
 });

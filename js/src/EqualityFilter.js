@@ -50,14 +50,15 @@ export class EqualityFilterView extends widgets.DOMWidgetView {
         select.style.width = '200px';
         this.el.appendChild(select);
         const $select = $(select)
-        this._initializeValueSelect($select, options);
+        const filterValue = this.model.get('filter_value');
+        this._initializeValueSelect($select, options, filterValue);
         $select.on('change', e => this._onFilterChange())
         return $select
     }
 
     _onColumnChange() {
         const options = this._getValueSelectOptions()
-        this._initializeValueSelect(this.$valuesSelect, options);
+        this._initializeValueSelect(this.$valuesSelect, options, []);
         this.model.set('index_column_selected', parseInt(this.$columnsSelect.val()));
         this.model.set('filter_value', []);
         this.touch();
@@ -83,8 +84,9 @@ export class EqualityFilterView extends widgets.DOMWidgetView {
         return options;
     }
 
-    _initializeValueSelect($select, options) {
+    _initializeValueSelect($select, options, filterValue) {
         $select.children('option').remove();
         $select.select2({tags: true, data: options});
+        $select.val(filterValue).trigger('change');
     }
 }
