@@ -4,7 +4,7 @@ import $ from 'jquery';
 import 'select2';
 
 
-export class FiltersListModel extends widgets.DOMWidgetModel {
+export class FiltersListModel extends widgets.VBoxModel {
     defaults() {
         return {
             ...super.defaults(),
