@@ -59,6 +59,7 @@ export class EqualityFilterView extends widgets.DOMWidgetView {
         const options = this._getValueSelectOptions()
         this._initializeValueSelect(this.$valuesSelect, options);
         this.model.set('index_column_selected', parseInt(this.$columnsSelect.val()));
+        this.model.set('filter_value', []);
         this.touch();
     }
 

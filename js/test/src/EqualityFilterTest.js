@@ -26,7 +26,7 @@ describe('EqualityFilter#defaults', () => {
     });
 });
 
-describe('EqualityFilter#with_dataframe', () => {
+describe('EqualityFilter#withDataframe', () => {
     let manager;
     let model;
     let view;
@@ -71,12 +71,47 @@ describe('EqualityFilter#with_dataframe', () => {
 
     it('have the unique values for the selected column as options to the second select', () => {
         const secondSelect = view.$el.find('select')[1];
-        const options = $(secondSelect).find('option');
+        const options = $(secondSelect).find('option').toArray();
         
-        expect(options.toArray().map((el) => el.text))
+        expect(options.map((el) => el.text))
             .to.deep.equal(uniqueValues[indexColumnSelected]);
-        expect(options.toArray().map((el) => el.getAttribute('value')))
+        expect(options.map((el) => el.getAttribute('value')))
             .to.deep.equal(uniqueValues[indexColumnSelected]);
     });
 
+});
+
+describe('EqualityFilter#afterColumnSelect', () => {
+    let manager;
+    let model;
+    let view;
+    const columns = ['first-column', 'second-column', 'third-column']
+    const uniqueValues = [['a', 'b'], [1, 2, 3], ['x', 'y', 1]]
+    const indexColumnSelected = 0;
+    const filterValue = ['a'];
+
+    beforeEach(async () => {
+        manager = new DummyManager();
+        const attributes = { 
+            columns, 
+            unique_values: uniqueValues, 
+            index_column_selected: indexColumnSelected,
+            filter_value: filterValue
+        }
+        model = new EqualityFilterModel(attributes, { model_id: modelId, widget_manager: manager });
+        view = new EqualityFilterView({ model });
+        await view.render();
+        const columnSelect = view.$el.find('select')[0];
+        $(columnSelect).select2().val('2').trigger('change');
+    });
+
+    it('switch the options in the second select', () => { 
+        const valuesSelect = view.$el.find('select')[1];
+        const options = $(valuesSelect).find('option').toArray()
+        expect(options.map((el) => el.text)).to.deep.equal(uniqueValues[2].map(v => String(v)));
+    })
+
+    it('reset the filter value', () => {
+        expect(model.get('filter_value')).to.deep.equal([]);
+    });
 });
