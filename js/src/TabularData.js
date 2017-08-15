@@ -2,7 +2,48 @@ import widgets from 'jupyter-js-widgets';
 
 import Slick from './vendor/slickgrid-2.3.6';
 
+class RemoteModel {
+    constructor(requestPages) {
+        this.pageSize = 1000;
+        this.data = {length: 0};
+        this._pages = {length: 0};
+        this._maxPage = 100; // fixme
+        this._requestPages = requestPages
+    }
+
+    ensureData(from, to) {
+        const fromPage = Math.floor(from / this.pageSize);
+        const toPage = Math.floor(to / this.pageSize);
+        this._requestPages(fromPage, toPage);
+    }
+
+    _requestPages(fromPage, toPage) {
+        fromPage = Math.max(fromPage, 0);
+        toPage = Math.min(toPage, this._maxPage - 1);
+
+        // avoid reloading data
+        while(this._pages[fromPage] !== undefined && fromPage < toPage) fromPage++;
+        while(this._pages[toPage] !== undefined && fromPage < toPage) toPage--;
+
+        console.log(`fetching pages ${fromPage} to ${toPage}.`)
+        this._fetchPages(fromPage, toPage)
+    }
+
+    receiveData(dataMessage) {
+        const { pageNumber, rows } = dataMessage
+        this._pages[pageNumber] = rows
+        this._buildDataFromPages()
+    }
+
+    _buildDataFromPages() {
+    }
+}
+
 export class TabularDataModel extends widgets.DOMWidgetModel {
+    static messageTypes = {
+        PAGE_RESULT: 'PAGE_RESULT',
+    }
+
     defaults() {
         return {
             ...super.defaults(),
@@ -13,7 +54,49 @@ export class TabularDataModel extends widgets.DOMWidgetModel {
             _model_module_version: '0.1.0',
             _view_module_version: '0.1.0',
             _columns: [],
-            _data: []
+            _number_rows: 1000,
+            _viewport: [],
+            _page_size: null
+        }
+    }
+
+    _requestPages(fromPage, toPage) {
+        this.send({
+            event: 'pageRequest',
+            fromPage,
+            toPage
+        }, this.callbacks());
+    }
+
+    onViewportChanged() {
+        // const [from, to] = this.get('_viewport');
+        // this.dataModel.ensureData(from, to);
+    }
+
+    initialize(attributes, options) {
+        super.initialize(attributes, options);
+        this.data = {length: this.get('_number_rows')};
+        this.on('change:_viewport', () => this.onViewportChanged());
+        this.on('msg:custom', (msg) => this.onCustomMessage(msg));
+
+    }
+
+    onCustomMessage(msg) {
+        const columns = this.get('_columns');
+        if (msg.type === TabularDataModel.messageTypes.PAGE_RESULT) {
+            console.log('received page result');
+            const { startRow, pageData } = msg.payload;
+            console.log(`starting at ${startRow}`);
+            console.log(pageData);
+            for(
+                let irow = startRow, incomingRow = 0; 
+                irow < startRow + pageData.length; 
+                irow++, incomingRow++
+            ) {
+                this.data[irow] = _.object(columns, pageData[incomingRow]);
+            }
+            console.log(this.data);
+            this.trigger('data_loaded', { from: startRow, to: startRow + pageData.length });
         }
     }
 };
@@ -40,13 +123,30 @@ export class TabularDataView extends widgets.DOMWidgetView {
             grid.setData(this._getGridData());
             grid.render();
         });
+        this.listenTo(this.model, 'data_loaded', ({ from, to }) => {
+            console.log('data loaded event in view')
+            console.log(`from: ${from} to: ${to}`);
+            for(let irow = from; irow < to; irow++) {
+                grid.invalidateRow(irow);
+            }
+            grid.updateRowCount();
+            grid.render();
+        });
+
+        const button = document.createElement('button');
+        $(button).on('click', () => this.send({ 'key1': 'value-26'}));
+        this.el.appendChild(button);
+
+        grid.onViewportChanged.subscribe(() => {
+            const gridViewport = grid.getViewport();
+            const { top, bottom } = gridViewport;
+            this.model.set('_viewport', [top, bottom]);
+            this.touch();
+        });
     }
 
     _getGridData() {
-        const columns = this.model.get('_columns');
-        return this.model.get('_data').map(row => {
-            return _.object(columns, row);
-        });
+        return this.model.data;
     }
 };
 

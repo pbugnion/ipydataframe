@@ -1,3 +1,4 @@
+import math
 import ipywidgets as widgets
 from traitlets import (
         Instance, List, Dict, Unicode, observe, Tuple, default, Integer,
@@ -17,19 +18,53 @@ class DFViewer(widgets.DOMWidget):
     _view_module_version = Unicode('^0.1.0').tag(sync=True)
     _model_module_version = Unicode('^0.1.0').tag(sync=True)
     _columns = List(Unicode()).tag(sync=True)
-    _data = List().tag(sync=True)
+    _data = List()
+    _viewport = List().tag(sync=True)
+    _page_size = Integer(default_value=100, allow_none=False).tag(sync=True)
 
     def __init__(self, df, *args, **kwargs):
         self._df = df
         self._columns = df.columns.tolist()
         self._data = df.values.tolist()
+        self._pages_sent = set()
         super(DFViewer, self).__init__(*args, **kwargs)
+        self._send_page(0)
 
     @observe('df')
     def _update_columns_data(self, change):
         new_df = change['new']
         self._columns = new_df.columns.tolist()
         self._data = new_df.values.tolist()
+
+    @observe('_viewport')
+    def _update_pages(self, change):
+        new_viewport = change['new']
+        (from_row, to_row) = new_viewport
+        from_page = math.floor(from_row / self._page_size)
+        to_page = math.ceil(to_row / self._page_size)
+        while from_page in self._pages_sent and from_page <= to_page:
+            from_page += 1
+        while to_page in self._pages_sent and from_page <= to_page:
+            to_page -= 1
+        for page_number in range(from_page, to_page):
+            self._send_page(page_number)
+
+    def _send_page(self, page_number):
+        print('sending page {}'.format(page_number))
+        self._pages_sent.add(page_number)
+        from_row = page_number * self._page_size
+        to_row = from_row + self._page_size
+        page = self._data[from_row:to_row]
+        print(len(page))
+        self.send({
+            'type': 'PAGE_RESULT', 
+            'payload': {
+                'pageNumber': page_number, 
+                'pageData': page, 
+                'startRow': from_row
+            }
+        })
+
 
 
 class EqualityFilter(widgets.DOMWidget):
