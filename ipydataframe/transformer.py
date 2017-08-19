@@ -35,8 +35,9 @@ class DFViewer(widgets.DOMWidget):
         self._send_page(0)
 
     def _handle_custom_message(self, content):
-        print(content)
         if content.get('type') == 'SYNC_PAGES':
+            # Used by the client when it's first instantiated
+            # to recover the state stored in the model.
             for page in self._pages_sent:
                 self._send_page(page)
 
