@@ -60,34 +60,17 @@ export class TabularDataModel extends widgets.DOMWidgetModel {
         }
     }
 
-    _requestPages(fromPage, toPage) {
-        this.send({
-            event: 'pageRequest',
-            fromPage,
-            toPage
-        }, this.callbacks());
-    }
-
-    onViewportChanged() {
-        // const [from, to] = this.get('_viewport');
-        // this.dataModel.ensureData(from, to);
-    }
-
     initialize(attributes, options) {
         super.initialize(attributes, options);
         this.data = {length: this.get('_number_rows')};
-        this.on('change:_viewport', () => this.onViewportChanged());
         this.on('msg:custom', (msg) => this.onCustomMessage(msg));
-
     }
 
     onCustomMessage(msg) {
         const columns = this.get('_columns');
         if (msg.type === TabularDataModel.messageTypes.PAGE_RESULT) {
-            console.log('received page result');
             const { startRow, pageData } = msg.payload;
-            console.log(`starting at ${startRow}`);
-            console.log(pageData);
+            console.log(`Received page starting at ${startRow}`);
             for(
                 let irow = startRow, incomingRow = 0; 
                 irow < startRow + pageData.length; 
@@ -95,7 +78,6 @@ export class TabularDataModel extends widgets.DOMWidgetModel {
             ) {
                 this.data[irow] = _.object(columns, pageData[incomingRow]);
             }
-            console.log(this.data);
             this.trigger('data_loaded', { from: startRow, to: startRow + pageData.length });
         }
     }
@@ -132,10 +114,6 @@ export class TabularDataView extends widgets.DOMWidgetView {
             grid.updateRowCount();
             grid.render();
         });
-
-        const button = document.createElement('button');
-        $(button).on('click', () => this.send({ 'key1': 'value-26'}));
-        this.el.appendChild(button);
 
         grid.onViewportChanged.subscribe(() => {
             const gridViewport = grid.getViewport();

@@ -26,6 +26,7 @@ class DFViewer(widgets.DOMWidget):
         self._df = df
         self._columns = df.columns.tolist()
         self._data = df.values.tolist()
+        self._max_page = math.floor(len(self._data) / self._page_size)
         self._pages_sent = set()
         super(DFViewer, self).__init__(*args, **kwargs)
         self._send_page(0)
@@ -35,13 +36,18 @@ class DFViewer(widgets.DOMWidget):
         new_df = change['new']
         self._columns = new_df.columns.tolist()
         self._data = new_df.values.tolist()
+        self._max_page = math.floor(len(self._data) / self._page_size)
 
     @observe('_viewport')
     def _update_pages(self, change):
         new_viewport = change['new']
         (from_row, to_row) = new_viewport
-        from_page = math.floor(from_row / self._page_size)
-        to_page = math.ceil(to_row / self._page_size)
+        # Ensure we have one page on either side
+        # of the current viewport
+        from_page = math.floor(from_row / self._page_size) - 1
+        from_page = max(0, from_page)
+        to_page = math.ceil(to_row / self._page_size) + 1
+        to_page = min(self._max_page, to_page)
         while from_page in self._pages_sent and from_page <= to_page:
             from_page += 1
         while to_page in self._pages_sent and from_page <= to_page:
