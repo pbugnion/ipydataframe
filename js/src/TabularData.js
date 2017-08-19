@@ -28,6 +28,12 @@ export class TabularDataModel extends widgets.DOMWidgetModel {
         super.initialize(attributes, options);
         this.data = {length: this.get('_number_rows')};
         this.on('msg:custom', (msg) => this.onCustomMessage(msg));
+        this.syncPages();
+    }
+
+    syncPages() {
+        const message = { type: 'SYNC_PAGES' }
+        this.send(message, this.callbacks());
     }
 
     onCustomMessage(msg) {
