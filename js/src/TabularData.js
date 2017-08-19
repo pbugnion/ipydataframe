@@ -2,42 +2,6 @@ import widgets from 'jupyter-js-widgets';
 
 import Slick from './vendor/slickgrid-2.3.6';
 
-class RemoteModel {
-    constructor(requestPages) {
-        this.pageSize = 1000;
-        this.data = {length: 0};
-        this._pages = {length: 0};
-        this._maxPage = 100; // fixme
-        this._requestPages = requestPages
-    }
-
-    ensureData(from, to) {
-        const fromPage = Math.floor(from / this.pageSize);
-        const toPage = Math.floor(to / this.pageSize);
-        this._requestPages(fromPage, toPage);
-    }
-
-    _requestPages(fromPage, toPage) {
-        fromPage = Math.max(fromPage, 0);
-        toPage = Math.min(toPage, this._maxPage - 1);
-
-        // avoid reloading data
-        while(this._pages[fromPage] !== undefined && fromPage < toPage) fromPage++;
-        while(this._pages[toPage] !== undefined && fromPage < toPage) toPage--;
-
-        console.log(`fetching pages ${fromPage} to ${toPage}.`)
-        this._fetchPages(fromPage, toPage)
-    }
-
-    receiveData(dataMessage) {
-        const { pageNumber, rows } = dataMessage
-        this._pages[pageNumber] = rows
-        this._buildDataFromPages()
-    }
-
-    _buildDataFromPages() {
-    }
-}
 
 export class TabularDataModel extends widgets.DOMWidgetModel {
     static messageTypes = {
