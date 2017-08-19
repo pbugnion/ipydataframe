@@ -18,9 +18,9 @@ export class TabularDataModel extends widgets.DOMWidgetModel {
             _model_module_version: '0.1.0',
             _view_module_version: '0.1.0',
             _columns: [],
-            _number_rows: 1000,
             _viewport: [],
-            _page_size: null
+            _page_size: null,
+            _number_rows: null
         }
     }
 

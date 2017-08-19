@@ -19,6 +19,7 @@ class DFViewer(widgets.DOMWidget):
     _model_module_version = Unicode('^0.1.0').tag(sync=True)
     _columns = List(Unicode()).tag(sync=True)
     _data = List()
+    _number_rows = Integer().tag(sync=True)
     _viewport = List().tag(sync=True)
     _page_size = Integer(default_value=100, allow_none=False).tag(sync=True)
 
@@ -26,6 +27,7 @@ class DFViewer(widgets.DOMWidget):
         self._df = df
         self._columns = df.columns.tolist()
         self._data = df.values.tolist()
+        self._number_rows = len(self._data)
         self._max_page = math.floor(len(self._data) / self._page_size)
         self._pages_sent = set()
         super(DFViewer, self).__init__(*args, **kwargs)
@@ -37,7 +39,7 @@ class DFViewer(widgets.DOMWidget):
     def _handle_custom_message(self, content):
         if content.get('type') == 'SYNC_PAGES':
             # Used by the client when it's first instantiated
-            # to recover the state stored in the model.
+            # to recover the state stored in the model.jj
             for page in self._pages_sent:
                 self._send_page(page)
 
@@ -46,6 +48,7 @@ class DFViewer(widgets.DOMWidget):
         new_df = change['new']
         self._columns = new_df.columns.tolist()
         self._data = new_df.values.tolist()
+        self._number_rows = len(self._data)
         self._max_page = math.floor(len(self._data) / self._page_size)
 
     @observe('_viewport')
